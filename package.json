@@ -16,7 +16,6 @@
     "build/**/*"
   ],
   "scripts": {
-    "postbuild": "node update-imports.cjs",
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
     "prepare": "npm run build",
