@@ -6,10 +6,6 @@ function updateImports(dir) {
 
   for (const file of files) {
     const filePath = path.join(dir, file);
-    // Skip over lucid-cardano related files or directories
-    if (filePath.includes('lucid-cardano')) {
-      continue;
-    }
 
     if (fs.statSync(filePath).isDirectory()) {
       updateImports(filePath);
@@ -18,7 +14,7 @@ function updateImports(dir) {
 
       // Regex to find import statements and append .js
       content = content.replace(/from ['"]([^'"]+)['"]/g, (match, p1) => {
-        if (!p1.endsWith('.js') && !p1.startsWith('http') && !p1.includes('@')) {
+        if (!p1.endsWith('.js') && !p1.startsWith('http') && !p1.includes('@') && !p1.includes('lucid-cardano')) {
           return `from '${p1}.js'`;
         }
         return match;
