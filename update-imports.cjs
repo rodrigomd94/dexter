@@ -14,7 +14,7 @@ function updateImports(dir) {
 
       // Regex to find import statements and append .js
       content = content.replace(/from ['"]([^'"]+)['"]/g, (match, p1) => {
-        if (!p1.endsWith('.js') && !p1.startsWith('http') && !p1.includes('@')) {
+        if (p1.startsWith('.') && !p1.endsWith('.js')) {
           return `from '${p1}.js'`;
         }
         return match;
@@ -24,7 +24,6 @@ function updateImports(dir) {
     }
   }
 }
-
 
 // Starting directory
 updateImports('./build');
