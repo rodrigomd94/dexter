@@ -6,6 +6,10 @@ function updateImports(dir) {
 
   for (const file of files) {
     const filePath = path.join(dir, file);
+    // Skip over lucid-cardano related files or directories
+    if (filePath.includes('lucid-cardano')) {
+      continue;
+    }
 
     if (fs.statSync(filePath).isDirectory()) {
       updateImports(filePath);
