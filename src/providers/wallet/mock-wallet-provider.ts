@@ -1,6 +1,7 @@
 import { Cip30Api, PayToAddress, WalletOptions } from '@app/types';
 import { DexTransaction } from '@dex/models/dex-transaction';
 import { BaseWalletProvider } from './base-wallet-provider';
+import { ExternalWallet } from 'lucid-cardano';
 
 export class MockWalletProvider extends BaseWalletProvider {
 
@@ -31,6 +32,12 @@ export class MockWalletProvider extends BaseWalletProvider {
     }
 
     public loadWallet(walletApi: Cip30Api): Promise<BaseWalletProvider> {
+        this.isWalletLoaded = true;
+
+        return Promise.resolve(this as BaseWalletProvider);
+    }
+
+    public loadWalletFrom(walletInfo: ExternalWallet): Promise<BaseWalletProvider> {
         this.isWalletLoaded = true;
 
         return Promise.resolve(this as BaseWalletProvider);

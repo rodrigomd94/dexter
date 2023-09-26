@@ -68,15 +68,10 @@ export class LucidProvider extends BaseWalletProvider {
             });
     }
 
-    public loadWalletFrom(walletInfo: ExternalWallet, options: WalletOptions = {}, config: BlockfrostConfig | KupmiosConfig): Promise<BaseWalletProvider> {
+    public loadWalletFrom(walletInfo: ExternalWallet, config: BlockfrostConfig | KupmiosConfig): Promise<BaseWalletProvider> {
         return this.loadLucid(config)
             .then((lucid: Lucid) => {
                 this._api = lucid;
-
-                const addressType: 'Base' | 'Enterprise' = options.addressType === AddressType.Enterprise
-                    ? 'Enterprise'
-                    : 'Base';
-
                 this._api.selectWalletFrom(
                     walletInfo
                 );
