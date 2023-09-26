@@ -203,7 +203,9 @@ export class LucidProvider extends BaseWalletProvider {
                 : new Blockfrost(
                     config.url,
                     config.projectId
-                )
+                ),
+                'kupoUrl' in config
+                ? undefined : config.url.includes('preprod') ? 'Preprod' : (config.url.includes('preview') ? 'Preview' : 'Mainnet')
         );
     }
 
