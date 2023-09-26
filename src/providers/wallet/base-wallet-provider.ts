@@ -1,5 +1,6 @@
 import { Cip30Api, PayToAddress, WalletOptions } from '@app/types';
 import { DexTransaction } from '@dex/models/dex-transaction';
+import { ExternalWallet } from 'lucid-cardano';
 
 export abstract class BaseWalletProvider {
 
@@ -12,6 +13,8 @@ export abstract class BaseWalletProvider {
     abstract stakingKeyHash(): string;
 
     abstract loadWallet(walletApi: Cip30Api, config: any): Promise<BaseWalletProvider>;
+
+    abstract loadWalletFrom(walletInfo: ExternalWallet, config: any): Promise<BaseWalletProvider>;
 
     abstract loadWalletFromSeedPhrase(seed: string[], options: WalletOptions, config: any): Promise<BaseWalletProvider>;
 
