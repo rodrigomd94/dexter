@@ -164,7 +164,7 @@ export class LucidProvider extends BaseWalletProvider {
     }
 
     public getTxCbor(transaction: DexTransaction): string {
-        return transaction.providerData.tx.toString()
+        return transaction.providerData.tx.txComplete.toString()
     }
 
     private paymentFromAssets(assetBalances: AssetBalance[]): Assets {

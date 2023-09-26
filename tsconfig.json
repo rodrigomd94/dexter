@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./build",
     "baseUrl": ".",
-    "module": "ESNext",
+    "module": "es2020",
     "target": "es2020",
     "lib": ["es2020", "DOM"],
     "moduleResolution": "node",
