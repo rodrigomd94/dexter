@@ -238,7 +238,7 @@ export class SwapRequest {
         return swapTransaction;
     }
 
-    public build(): DexTransaction {
+    public build(): Promise<DexTransaction> {
         if (!this._dexter.walletProvider) {
             throw new Error('Wallet provider must be set before submitting a swap order.');
         }
@@ -248,12 +248,13 @@ export class SwapRequest {
 
         const swapTransaction: DexTransaction = this._dexter.walletProvider.createTransaction();
 
-        this.getPaymentsToAddresses()
+        return this.getPaymentsToAddresses()
             .then((payToAddresses: PayToAddress[]) => {
-                this.buildSwapOrder(swapTransaction, payToAddresses);
+                return this.buildSwapOrder(swapTransaction, payToAddresses)
+                .then((tx) => tx);
             });
 
-        return swapTransaction;
+        //return swapTransaction;
     }
 
     private sendSwapOrder(swapTransaction: DexTransaction, payToAddresses: PayToAddress[],) {
@@ -310,7 +311,7 @@ export class SwapRequest {
             });
     }
 
-    private buildSwapOrder(swapTransaction: DexTransaction, payToAddresses: PayToAddress[],) {
+    private buildSwapOrder(swapTransaction: DexTransaction, payToAddresses: PayToAddress[],): Promise<DexTransaction> {
         swapTransaction.status = TransactionStatus.Building;
 
         const swapInTokenName: string = this._swapInToken === 'lovelace' ? 'ADA' : this._swapInToken.assetName;
@@ -322,15 +323,16 @@ export class SwapRequest {
         });
 
         // Build transaction
-        swapTransaction.payToAddresses(payToAddresses)
-            .catch((error) => {
+        return swapTransaction.payToAddresses(payToAddresses)
+            .then((tx) => tx)
+           /*  .catch((error) => {
                 swapTransaction.error = {
                     step: TransactionStatus.Building,
                     reason: 'Failed to build transaction.',
                     reasonRaw: error,
                 };
                 swapTransaction.status = TransactionStatus.Errored;
-            });
+            }); */
     }
 
 }
