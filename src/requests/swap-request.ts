@@ -238,6 +238,28 @@ export class SwapRequest {
         return swapTransaction;
     }
 
+    public build(): DexTransaction {
+        if (! this._dexter.walletProvider) {
+            throw new Error('Wallet provider must be set before submitting a swap order.');
+        }
+        if (! this._dexter.walletProvider.isWalletLoaded) {
+            throw new Error('Wallet must be loaded before submitting a swap order.');
+        }
+
+        const swapTransaction: DexTransaction = this._dexter.walletProvider.createTransaction();
+        
+        if (! this._dexter.config.shouldSubmitOrders) {
+            return swapTransaction;
+        }
+
+        this.getPaymentsToAddresses()
+            .then((payToAddresses: PayToAddress[]) => {
+                this.sendSwapOrder(swapTransaction, payToAddresses);
+            });
+
+        return swapTransaction;
+    }
+
     private sendSwapOrder(swapTransaction: DexTransaction, payToAddresses: PayToAddress[]) {
         swapTransaction.status = TransactionStatus.Building;
 

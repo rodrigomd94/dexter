@@ -62,4 +62,8 @@ export class MockWalletProvider extends BaseWalletProvider {
         return Promise.resolve('hashtest');
     }
 
+    public getTxCbor(transaction: DexTransaction): string {
+        return "2e9ff0af3f2651e0d73e8f15330af41464a7c833ac80e78382d351a464d5bdd2"
+    }
+
 }

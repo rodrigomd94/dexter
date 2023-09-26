@@ -25,4 +25,5 @@ export abstract class BaseWalletProvider {
 
     abstract submitTransaction(transaction: DexTransaction): Promise<string>;
 
+    abstract getTxCbor(transaction: DexTransaction): string;
 }

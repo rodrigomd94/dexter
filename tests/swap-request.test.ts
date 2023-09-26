@@ -108,4 +108,32 @@ describe('SwapRequest', () => {
 
     });
 
+    describe('build and return cbor', () => {
+
+        const liquidityPool: LiquidityPool = new LiquidityPool(
+            Minswap.identifier,
+            'lovelace',
+            asset,
+            30817255371488n,
+            349805856622734n,
+            'addr1',
+        );
+        liquidityPool.poolFeePercent = 0.3;
+
+        const swapRequest: SwapRequest = dexter.newSwapRequest()
+            .forLiquidityPool(liquidityPool)
+            .withSwapInToken('lovelace')
+            .withSwapInAmount(10_000_000_000000n)
+            .withSlippagePercent(0.5);
+
+        it('Can build and return cbor', () => {
+            swapRequest.flip();
+            const txCbor = swapRequest.build().toCborHex();
+            expect(txCbor.length).toBe(64);
+        });
+
+    });
+
 });
+
+

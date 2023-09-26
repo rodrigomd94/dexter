@@ -88,6 +88,10 @@ export class DexTransaction {
             });
     }
 
+    public toCborHex(): string {
+        return this._walletProvider.getTxCbor(this)
+    }
+
     public onBuilding(callback: TransactionCallback): DexTransaction {
         this.addListener((transaction: DexTransaction) => {
             if (transaction.status === TransactionStatus.Building) {

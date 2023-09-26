@@ -6,7 +6,7 @@ import {
     AddressDetails,
     Assets,
     Blockfrost,
-    Datum, Kupmios,
+    Datum, ExternalWallet, Kupmios,
     Lucid,
     TxComplete,
     TxHash,
@@ -68,6 +68,22 @@ export class LucidProvider extends BaseWalletProvider {
             });
     }
 
+    public loadWalletFrom(walletInfo: ExternalWallet, options: WalletOptions = {}, config: BlockfrostConfig | KupmiosConfig): Promise<BaseWalletProvider> {
+        return this.loadLucid(config)
+            .then((lucid: Lucid) => {
+                this._api = lucid;
+
+                const addressType: 'Base' | 'Enterprise' = options.addressType === AddressType.Enterprise
+                    ? 'Enterprise'
+                    : 'Base';
+
+                this._api.selectWalletFrom(
+                    walletInfo
+                );
+                return this.loadWalletInformation();
+            });
+    }
+
     public createTransaction(): DexTransaction {
         const transaction: DexTransaction = new DexTransaction(this);
         transaction.providerData.tx = this._api.newTx();
@@ -76,7 +92,7 @@ export class LucidProvider extends BaseWalletProvider {
     }
 
     public attachMetadata(transaction: DexTransaction, key: number, json: Object): DexTransaction {
-        if (! transaction.providerData.tx) {
+        if (!transaction.providerData.tx) {
             return transaction;
         }
 
@@ -133,7 +149,7 @@ export class LucidProvider extends BaseWalletProvider {
     }
 
     public signTransaction(transaction: DexTransaction): Promise<DexTransaction> {
-        if (! this.isWalletLoaded) {
+        if (!this.isWalletLoaded) {
             throw new Error('Must load wallet before signing transaction.');
         }
 
@@ -150,6 +166,10 @@ export class LucidProvider extends BaseWalletProvider {
             .then((txHash: TxHash) => {
                 return txHash;
             });
+    }
+
+    public getTxCbor(transaction: DexTransaction): string {
+        return transaction.providerData.tx.toString()
     }
 
     private paymentFromAssets(assetBalances: AssetBalance[]): Assets {
