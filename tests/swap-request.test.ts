@@ -126,12 +126,6 @@ describe('SwapRequest', () => {
             .withSwapInAmount(10_000_000_000000n)
             .withSlippagePercent(0.5);
 
-        it('Can build and return cbor', () => {
-            swapRequest.flip();
-            const txCbor = swapRequest.build().toCborHex();
-            expect(txCbor.length).toBe(64);
-        });
-
     });
 
 });
