@@ -63,7 +63,7 @@ export class SundaeSwap extends BaseDex {
         }
 
         const relevantAssets: AssetBalance[] = utxo.assetBalances.filter((assetBalance: AssetBalance) => {
-            const assetBalanceId: string = assetBalance.asset === 'lovelace' ? 'lovelace' : assetBalance.asset.id();
+            const assetBalanceId: string = assetBalance.asset === 'lovelace' ? 'lovelace' : assetBalance.asset.identifier();
 
             return ! assetBalanceId.startsWith(this.lpTokenPolicyId);
         });
@@ -96,6 +96,7 @@ export class SundaeSwap extends BaseDex {
         if (lpToken) {
             lpToken.nameHex = '6c' + lpToken.nameHex;
             liquidityPool.lpToken = lpToken;
+            liquidityPool.identifier = lpToken.identifier();
         }
 
         try {
@@ -110,6 +111,9 @@ export class SundaeSwap extends BaseDex {
             liquidityPool.poolFeePercent = typeof parameters.LpFeeNumerator === 'number' && typeof parameters.LpFeeDenominator === 'number'
                 ? (parameters.LpFeeNumerator / parameters.LpFeeDenominator) * 100
                 : 0;
+            liquidityPool.totalLpTokens = typeof parameters.TotalLpTokens === 'number'
+                ? BigInt(parameters.TotalLpTokens)
+                : 0n;
         } catch (e) {
             return liquidityPool;
         }
